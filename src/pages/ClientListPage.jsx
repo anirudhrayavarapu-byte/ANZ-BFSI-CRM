@@ -15,11 +15,16 @@ export default function ClientListPage() {
 
   return (
     <AppShell title="My Clients">
-      <Box sx={{ position: 'sticky', top: 56, zIndex: 10, bgcolor: '#fff', borderBottom: '1px solid', borderColor: 'divider' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2, py: 1 }}>
+      <Box sx={{
+        position: 'sticky', top: 56, zIndex: 10,
+        bgcolor: '#fff',
+        borderBottom: '1px solid #f0f2f8',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, px: 2, py: 1.25 }}>
           <SearchIcon sx={{ color: 'text.disabled', fontSize: 20 }} />
           <InputBase
-            placeholder="Search clients..."
+            placeholder="Search by name, title, or company..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             autoFocus
@@ -30,13 +35,15 @@ export default function ClientListPage() {
       </Box>
 
       {loading ? (
-        <Box sx={{ pt: 6, textAlign: 'center' }}><CircularProgress /></Box>
+        <Box sx={{ pt: 8, textAlign: 'center' }}><CircularProgress /></Box>
       ) : clients.length === 0 ? (
-        <Box sx={{ pt: 6, textAlign: 'center' }}>
-          <Typography color="text.secondary">No clients found</Typography>
+        <Box sx={{ pt: 8, textAlign: 'center', px: 3 }}>
+          <Typography sx={{ fontSize: 36, mb: 1 }}>🔍</Typography>
+          <Typography fontWeight={700} color="text.secondary">No clients found</Typography>
+          <Typography variant="caption" color="text.disabled">Try a different name or company</Typography>
         </Box>
       ) : (
-        <Box>
+        <Box sx={{ bgcolor: '#fff', mb: 10 }}>
           {clients.map(client => (
             <ClientListItem
               key={client.id}

@@ -5,22 +5,26 @@ export default function SearchBar({ value, onChange, onFocus }) {
   return (
     <Box
       sx={{
-        display: 'flex', alignItems: 'center', gap: 1,
-        bgcolor: 'rgba(255,255,255,0.15)',
-        borderRadius: 3, px: 1.5, py: 0.75,
-        mt: 1.5, cursor: 'text',
+        display: 'flex', alignItems: 'center', gap: 1.25,
+        bgcolor: 'rgba(255,255,255,0.14)',
+        backdropFilter: 'blur(8px)',
+        border: '1px solid rgba(255,255,255,0.2)',
+        borderRadius: '14px', px: 1.75, py: 1,
+        cursor: 'text',
+        transition: 'background 0.2s',
+        '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' },
       }}
       onClick={onFocus}
     >
-      <SearchIcon sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 20 }} />
+      <SearchIcon sx={{ color: 'rgba(255,255,255,0.65)', fontSize: 19 }} />
       <InputBase
-        placeholder="Find a client..."
+        placeholder="Search clients..."
         value={value}
         onChange={e => onChange(e.target.value)}
         onFocus={onFocus}
         sx={{
           color: '#fff', flex: 1, fontSize: 15,
-          '& input::placeholder': { color: 'rgba(255,255,255,0.6)', opacity: 1 },
+          '& input::placeholder': { color: 'rgba(255,255,255,0.55)', opacity: 1 },
         }}
         inputProps={{ 'aria-label': 'Search clients' }}
       />
