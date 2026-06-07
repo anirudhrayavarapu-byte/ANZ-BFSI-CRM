@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import GroupsIcon from '@mui/icons-material/Groups'
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 
@@ -9,6 +10,7 @@ const CARDS = [
   { key: 'clients', icon: PeopleAltIcon, label: 'My Clients', sub: 'client list', path: '/clients', color: '#e8eaf6', iconColor: '#3949ab', roles: ['team_member','manager','super_manager'] },
   { key: 'log', icon: EditNoteIcon, label: 'Log Meeting', sub: 'quick entry', path: '/log-meeting', color: '#e8f5e9', iconColor: '#2e7d32', roles: ['team_member','manager','super_manager'] },
   { key: 'team', icon: GroupsIcon, label: 'Team View', sub: 'manager only', path: '/team', color: '#fff3e0', iconColor: '#e65100', roles: ['manager','super_manager'] },
+  { key: 'users', icon: ManageAccountsIcon, label: 'Manage Users', sub: 'roles & access', path: '/admin/users', color: '#f3e5f5', iconColor: '#6a1b9a', roles: ['manager','super_manager'] },
 ]
 
 export default function ActionCards() {

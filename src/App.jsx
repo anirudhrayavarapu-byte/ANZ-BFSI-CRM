@@ -10,6 +10,7 @@ import ClientListPage from './pages/ClientListPage'
 import ClientCardPage from './pages/ClientCardPage'
 import LogMeetingPage from './pages/LogMeetingPage'
 import TeamViewPage from './pages/TeamViewPage'
+import UserManagementPage from './pages/UserManagementPage'
 
 const theme = createTheme({
   palette: {
@@ -66,6 +67,7 @@ export default function App() {
           <Route path="/clients/:id" element={<ProtectedRoute><ClientCardPage /></ProtectedRoute>} />
           <Route path="/log-meeting" element={<ProtectedRoute><LogMeetingPage /></ProtectedRoute>} />
           <Route path="/team" element={<ProtectedRoute allowedRoles={['manager','super_manager']}><TeamViewPage /></ProtectedRoute>} />
+          <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['manager','super_manager']}><UserManagementPage /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
