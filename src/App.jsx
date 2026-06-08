@@ -12,45 +12,51 @@ import LogMeetingPage from './pages/LogMeetingPage'
 import TeamViewPage from './pages/TeamViewPage'
 import UserManagementPage from './pages/UserManagementPage'
 
+const shadow1 = '0 1px 2px oklch(12% 0.030 262 / 0.05), 0 2px 8px oklch(12% 0.030 262 / 0.06)'
+const shadow2 = '0 4px 16px oklch(12% 0.030 262 / 0.10), 0 1px 4px oklch(12% 0.030 262 / 0.06)'
+const shadow3 = '0 8px 32px oklch(12% 0.030 262 / 0.14)'
+
 const theme = createTheme({
   palette: {
-    primary: { main: '#1a237e', light: '#534bae', dark: '#000051' },
-    secondary: { main: '#0288d1' },
-    background: { default: '#f0f2f8', paper: '#ffffff' },
-    success: { main: '#2e7d32' },
-    error: { main: '#c62828' },
-    warning: { main: '#e65100' },
+    primary:    { main: '#1a237e', light: '#534bae', dark: '#000051' },
+    secondary:  { main: '#0288d1' },
+    background: { default: 'oklch(96.5% 0.007 262)', paper: 'oklch(99.5% 0.003 262)' },
+    text:       { primary: 'oklch(17% 0.022 262)', secondary: 'oklch(50% 0.016 262)', disabled: 'oklch(68% 0.009 262)' },
+    success:    { main: 'oklch(51% 0.160 155)' },
+    error:      { main: 'oklch(52% 0.200 27)' },
+    warning:    { main: 'oklch(58% 0.180 55)' },
+    divider:    'oklch(94% 0.006 262)',
   },
   typography: {
-    fontFamily: '"Inter", "Roboto", sans-serif',
+    fontFamily: "'Figtree', system-ui, sans-serif",
+    h4: { fontWeight: 800, letterSpacing: '-0.6px' },
+    h5: { fontWeight: 800, letterSpacing: '-0.5px' },
     h6: { fontWeight: 700, letterSpacing: '-0.3px' },
+    subtitle1: { fontWeight: 600, letterSpacing: '-0.1px' },
+    subtitle2: { fontWeight: 600 },
+    body1: { lineHeight: 1.6 },
     body2: { lineHeight: 1.55 },
-    caption: { lineHeight: 1.4 },
+    caption: { lineHeight: 1.4, letterSpacing: '0.1px' },
+    overline: { fontWeight: 700, letterSpacing: '1px', fontSize: 11 },
+    button: { fontWeight: 700, textTransform: 'none', letterSpacing: '0.1px' },
   },
-  shape: { borderRadius: 12 },
-  shadows: [
-    'none',
-    '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
-    '0 3px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)',
-    '0 6px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06)',
-    '0 10px 24px rgba(0,0,0,0.12)',
-    ...Array(20).fill('none'),
-  ],
+  shape: { borderRadius: 14 },
+  shadows: ['none', shadow1, shadow2, shadow3, shadow3, ...Array(20).fill(shadow3)],
   components: {
     MuiButton: {
       styleOverrides: {
-        root: { textTransform: 'none', borderRadius: 12, minHeight: 46, fontWeight: 600, letterSpacing: '0.1px' },
-        contained: { boxShadow: '0 2px 8px rgba(26,35,126,0.3)', '&:hover': { boxShadow: '0 4px 12px rgba(26,35,126,0.4)' } },
+        root: { borderRadius: 12, minHeight: 46, fontWeight: 700 },
+        contained: { boxShadow: 'none', '&:hover': { boxShadow: shadow1 } },
       },
     },
     MuiTab: {
       styleOverrides: {
-        root: { textTransform: 'none', minHeight: 46, fontWeight: 600, fontSize: 14 },
+        root: { textTransform: 'none', minHeight: 46, fontWeight: 600, fontSize: 14, letterSpacing: '-0.1px' },
       },
     },
     MuiChip: {
       styleOverrides: {
-        root: { fontWeight: 600, borderRadius: 8 },
+        root: { fontWeight: 700, borderRadius: 8, fontFamily: "'Figtree', system-ui, sans-serif" },
         sizeSmall: { height: 22, fontSize: 11 },
       },
     },
@@ -61,14 +67,16 @@ const theme = createTheme({
       },
     },
     MuiCard: {
-      styleOverrides: {
-        root: { borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.07)' },
-      },
+      styleOverrides: { root: { borderRadius: 18, boxShadow: shadow1 } },
     },
     MuiFab: {
-      styleOverrides: {
-        root: { boxShadow: '0 4px 16px rgba(26,35,126,0.35)' },
-      },
+      styleOverrides: { root: { boxShadow: shadow2 } },
+    },
+    MuiAvatar: {
+      styleOverrides: { root: { fontFamily: "'Figtree', system-ui, sans-serif", fontWeight: 700 } },
+    },
+    MuiCssBaseline: {
+      styleOverrides: { body: { fontFamily: "'Figtree', system-ui, sans-serif" } },
     },
   },
 })

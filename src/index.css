@@ -1,18 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-  font-family: 'Inter', 'Roboto', sans-serif;
-  background: #f5f6fa;
-  -webkit-font-smoothing: antialiased;
-}
-
 :root {
-  --safe-top: env(safe-area-inset-top, 0px);
+  /* Hero / nav surfaces */
+  --c-hero:        oklch(12% 0.030 262);
+  --c-hero-raised: oklch(18% 0.028 262);
+  --c-hero-text:   oklch(92% 0.010 80);
+  --c-hero-muted:  oklch(62% 0.012 80);
+  --c-hero-border: oklch(22% 0.024 262);
+
+  /* Content surfaces */
+  --c-surface: oklch(96.5% 0.007 262);
+  --c-card:    oklch(99.5% 0.003 262);
+
+  /* Typography */
+  --c-text:   oklch(17% 0.022 262);
+  --c-text-2: oklch(50% 0.016 262);
+  --c-text-3: oklch(68% 0.009 262);
+
+  /* Borders */
+  --c-border:  oklch(90% 0.009 262);
+  --c-divider: oklch(94% 0.006 262);
+
+  /* Brand */
+  --c-brand: oklch(36% 0.190 262);
+
+  /* Status */
+  --c-overdue:     oklch(52% 0.200 27);
+  --c-overdue-bg:  oklch(52% 0.200 27 / 0.07);
+  --c-today:       oklch(58% 0.180 55);
+  --c-today-bg:    oklch(58% 0.180 55 / 0.07);
+  --c-upcoming:    oklch(62% 0.140 88);
+  --c-upcoming-bg: oklch(62% 0.140 88 / 0.06);
+  --c-ontrack:     oklch(51% 0.160 155);
+  --c-ontrack-bg:  oklch(51% 0.160 155 / 0.07);
+
+  /* Shadows */
+  --shadow-card:  0 1px 2px oklch(12% 0.030 262 / 0.05), 0 2px 8px oklch(12% 0.030 262 / 0.06);
+  --shadow-raise: 0 4px 16px oklch(12% 0.030 262 / 0.10), 0 1px 4px oklch(12% 0.030 262 / 0.06);
+
+  /* Safe areas */
+  --safe-top:    env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-#root {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
+body {
+  font-family: 'Figtree', system-ui, sans-serif;
+  background: var(--c-surface);
+  color: var(--c-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root { min-height: 100dvh; display: flex; flex-direction: column; }
+
+[role="button"], button, a { -webkit-tap-highlight-color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

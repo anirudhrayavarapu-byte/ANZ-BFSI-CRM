@@ -7,34 +7,10 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 
 const CARDS = [
-  {
-    key: 'clients', icon: PeopleAltIcon, label: 'My Clients', sub: 'View & manage',
-    path: '/clients',
-    gradient: 'linear-gradient(135deg, #1a237e 0%, #3949ab 100%)',
-    iconBg: 'rgba(255,255,255,0.15)',
-    roles: ['team_member', 'manager', 'super_manager'],
-  },
-  {
-    key: 'log', icon: EditNoteIcon, label: 'Log Meeting', sub: 'Quick entry',
-    path: '/log-meeting',
-    gradient: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)',
-    iconBg: 'rgba(255,255,255,0.15)',
-    roles: ['team_member', 'manager', 'super_manager'],
-  },
-  {
-    key: 'team', icon: GroupsIcon, label: 'Team View', sub: 'Coverage & cadence',
-    path: '/team',
-    gradient: 'linear-gradient(135deg, #bf360c 0%, #e64a19 100%)',
-    iconBg: 'rgba(255,255,255,0.15)',
-    roles: ['manager', 'super_manager'],
-  },
-  {
-    key: 'users', icon: ManageAccountsIcon, label: 'Manage Users', sub: 'Roles & access',
-    path: '/admin/users',
-    gradient: 'linear-gradient(135deg, #4a148c 0%, #7b1fa2 100%)',
-    iconBg: 'rgba(255,255,255,0.15)',
-    roles: ['manager', 'super_manager'],
-  },
+  { key: 'clients',  icon: PeopleAltIcon,      label: 'My Clients',    sub: 'View & manage',     path: '/clients',      roles: ['team_member','manager','super_manager'] },
+  { key: 'log',      icon: EditNoteIcon,        label: 'Log Meeting',   sub: 'Quick entry',        path: '/log-meeting',  roles: ['team_member','manager','super_manager'] },
+  { key: 'team',     icon: GroupsIcon,          label: 'Team View',     sub: 'Coverage & cadence', path: '/team',         roles: ['manager','super_manager'] },
+  { key: 'users',    icon: ManageAccountsIcon,  label: 'Manage Users',  sub: 'Roles & access',     path: '/admin/users',  roles: ['manager','super_manager'] },
 ]
 
 export default function ActionCards() {
@@ -44,65 +20,84 @@ export default function ActionCards() {
   const visible = CARDS.filter(c => c.roles.includes(role))
 
   return (
-    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5, mx: 2, mt: 2 }}>
-      {visible.map(card => {
-        const Icon = card.icon
-        return (
-          <Box
-            key={card.key}
-            onClick={() => navigate(card.path)}
-            sx={{
-              background: card.gradient,
-              borderRadius: '20px',
-              p: 2.5,
-              cursor: 'pointer',
-              userSelect: 'none',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-              position: 'relative',
-              overflow: 'hidden',
-              minHeight: 110,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              transition: 'transform 0.15s, box-shadow 0.15s',
-              '&:active': { transform: 'scale(0.96)', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' },
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: -20, right: -20,
-                width: 80, height: 80,
-                borderRadius: '50%',
-                background: 'rgba(255,255,255,0.08)',
-              },
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                bottom: -30, right: 10,
-                width: 100, height: 100,
-                borderRadius: '50%',
-                background: 'rgba(255,255,255,0.05)',
-              },
-            }}
-          >
-            <Box sx={{
-              width: 40, height: 40, borderRadius: '12px',
-              bgcolor: 'rgba(255,255,255,0.18)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              backdropFilter: 'blur(4px)',
-            }}>
-              <Icon sx={{ color: '#fff', fontSize: 22 }} />
+    <Box sx={{ px: 2.5, mt: 2.5 }}>
+      <Typography sx={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '1.2px',
+        textTransform: 'uppercase', color: 'var(--c-text-2)',
+        mb: 1.5,
+      }}>
+        Quick actions
+      </Typography>
+      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+        {visible.map(card => {
+          const Icon = card.icon
+          return (
+            <Box
+              key={card.key}
+              onClick={() => navigate(card.path)}
+              sx={{
+                bgcolor: 'var(--c-hero)',
+                borderRadius: '18px',
+                p: 2.25,
+                cursor: 'pointer',
+                userSelect: 'none',
+                minHeight: 118,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1px solid var(--c-hero-border)',
+                transition: 'opacity 0.12s, transform 0.12s',
+                '&:active': { opacity: 0.85, transform: 'scale(0.975)' },
+              }}
+            >
+              {/* Watermark icon — large, muted, top-right */}
+              <Box sx={{
+                position: 'absolute', top: -4, right: -4,
+                opacity: 0.06, color: 'var(--c-hero-text)',
+                pointerEvents: 'none',
+              }}>
+                <Icon sx={{ fontSize: 72 }} />
+              </Box>
+
+              {/* Small icon badge */}
+              <Box sx={{
+                width: 36, height: 36,
+                borderRadius: '10px',
+                bgcolor: 'oklch(100% 0 0 / 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}>
+                <Icon sx={{ color: 'var(--c-hero-text)', fontSize: 19 }} />
+              </Box>
+
+              {/* Label */}
+              <Box>
+                <Typography sx={{
+                  color: 'var(--c-hero-text)',
+                  fontWeight: 800,
+                  fontSize: 14,
+                  letterSpacing: '-0.3px',
+                  lineHeight: 1.2,
+                }}>
+                  {card.label}
+                </Typography>
+                <Typography sx={{
+                  color: 'var(--c-hero-muted)',
+                  fontSize: 11,
+                  fontWeight: 500,
+                  mt: 0.25,
+                }}>
+                  {card.sub}
+                </Typography>
+              </Box>
             </Box>
-            <Box sx={{ zIndex: 1 }}>
-              <Typography variant="body2" fontWeight={800} sx={{ color: '#fff', fontSize: 14, letterSpacing: '-0.2px' }}>
-                {card.label}
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', fontSize: 11 }}>
-                {card.sub}
-              </Typography>
-            </Box>
-          </Box>
-        )
-      })}
+          )
+        })}
+      </Box>
     </Box>
   )
 }

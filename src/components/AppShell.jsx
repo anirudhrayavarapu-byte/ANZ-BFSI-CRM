@@ -8,28 +8,41 @@ export default function AppShell({ title, children, hideBack = false, action }) 
   const canGoBack = location.key !== 'default' && !hideBack
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh', bgcolor: 'var(--c-surface)' }}>
       <AppBar
         position="sticky"
         elevation={0}
         sx={{
-          background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 100%)',
+          bgcolor: 'var(--c-hero)',
           pt: 'var(--safe-top)',
-          boxShadow: '0 2px 12px rgba(26,35,126,0.25)',
+          borderBottom: '1px solid var(--c-hero-border)',
         }}
       >
         <Toolbar sx={{ minHeight: 56, gap: 1 }}>
           {canGoBack && (
             <IconButton
-              edge="start" color="inherit"
+              edge="start"
               onClick={() => navigate(-1)}
-              sx={{ mr: 0.5, touchAction: 'manipulation', bgcolor: 'rgba(255,255,255,0.1)', borderRadius: '10px', width: 36, height: 36 }}
               aria-label="Go back"
+              sx={{
+                mr: 0.5, color: 'var(--c-hero-text)',
+                width: 36, height: 36, borderRadius: '10px',
+                bgcolor: 'oklch(100% 0 0 / 0.08)',
+                '&:active': { bgcolor: 'oklch(100% 0 0 / 0.14)' },
+                transition: 'background 0.12s',
+                touchAction: 'manipulation',
+              }}
             >
-              <ArrowBackIosNewIcon sx={{ fontSize: 16 }} />
+              <ArrowBackIosNewIcon sx={{ fontSize: 15 }} />
             </IconButton>
           )}
-          <Typography variant="h6" fontWeight={700} fontSize={17} noWrap sx={{ flex: 1, letterSpacing: '-0.3px' }}>
+          <Typography
+            variant="h6"
+            fontWeight={700}
+            fontSize={17}
+            noWrap
+            sx={{ flex: 1, color: 'var(--c-hero-text)', letterSpacing: '-0.3px' }}
+          >
             {title}
           </Typography>
           {action}

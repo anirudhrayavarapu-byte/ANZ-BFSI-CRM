@@ -1,60 +1,94 @@
 import { Box, Typography, Chip, Avatar } from '@mui/material'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { STATUS_LABELS, STATUS_COLORS } from '../../utils/followUpStatus'
 import { formatRelative } from '../../utils/dateFormat'
 
-const AVATAR_COLORS = ['#1a237e', '#1565c0', '#1b5e20', '#4a148c', '#bf360c', '#006064', '#33691e', '#880e4f']
+const AVATAR_PALETTE = [
+  'oklch(36% 0.19 262)',  /* brand navy  */
+  'oklch(32% 0.17 285)',  /* indigo      */
+  'oklch(38% 0.15 155)',  /* forest      */
+  'oklch(34% 0.18 310)',  /* plum        */
+  'oklch(37% 0.17  27)',  /* mahogany    */
+  'oklch(33% 0.13 200)',  /* teal        */
+]
 
-function avatarColor(name) {
-  if (!name) return AVATAR_COLORS[0]
+function avatarBg(name) {
+  if (!name) return AVATAR_PALETTE[0]
   let h = 0
-  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % AVATAR_COLORS.length
-  return AVATAR_COLORS[h]
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % AVATAR_PALETTE.length
+  return AVATAR_PALETTE[h]
 }
 
-function getInitials(name) {
+function initials(name) {
   if (!name) return '?'
-  const parts = name.trim().split(/\s+/)
-  return parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : name.slice(0, 2).toUpperCase()
+  const p = name.trim().split(/\s+/)
+  return p.length > 1 ? (p[0][0] + p[p.length - 1][0]).toUpperCase() : name.slice(0, 2).toUpperCase()
 }
 
 export default function ClientListItem({ client, onClick }) {
   const status = client.followUpStatus
-  const showStatus = status && status !== 'none' && status !== 'future'
+  const urgent = status === 'overdue' || status === 'today'
 
   return (
     <Box
       onClick={onClick}
       sx={{
         display: 'flex', alignItems: 'center', gap: 1.5,
-        px: 2, py: 1.5,
-        borderBottom: '1px solid', borderColor: '#f0f2f8',
-        cursor: 'pointer', bgcolor: '#fff',
-        '&:active': { bgcolor: '#f5f7ff' },
+        px: 2.5, py: 1.5,
+        borderBottom: '1px solid var(--c-divider)',
+        bgcolor: 'var(--c-card)',
+        cursor: 'pointer',
+        minHeight: 70,
         transition: 'background 0.1s',
-        minHeight: 68,
+        '&:active': { bgcolor: 'var(--c-surface)' },
       }}
     >
-      <Avatar sx={{ width: 44, height: 44, bgcolor: avatarColor(client.name), fontWeight: 700, fontSize: 15, flexShrink: 0 }}>
-        {getInitials(client.name)}
+      <Avatar sx={{
+        width: 44, height: 44,
+        bgcolor: avatarBg(client.name),
+        fontSize: 14, fontWeight: 800,
+        flexShrink: 0,
+        borderRadius: '13px',
+      }}>
+        {initials(client.name)}
       </Avatar>
+
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography variant="body2" fontWeight={700} noWrap sx={{ letterSpacing: '-0.1px' }}>{client.name}</Typography>
-        <Typography variant="caption" color="text.secondary" noWrap sx={{ display: 'block' }}>
+        <Typography sx={{
+          fontWeight: urgent ? 700 : 600,
+          fontSize: 14.5,
+          letterSpacing: '-0.2px',
+          color: 'var(--c-text)',
+          lineHeight: 1.3,
+        }} noWrap>
+          {client.name}
+        </Typography>
+        <Typography sx={{ fontSize: 12.5, color: 'var(--c-text-2)', mt: 0.2 }} noWrap>
           {client.title} · {client.accounts?.name}
         </Typography>
         {client.lastMeetingDate && (
-          <Typography variant="caption" color="text.disabled" sx={{ fontSize: 11 }}>
+          <Typography sx={{ fontSize: 11.5, color: 'var(--c-text-3)', mt: 0.1 }}>
             Last met {formatRelative(client.lastMeetingDate)}
           </Typography>
         )}
       </Box>
-      {showStatus && (
-        <Chip
-          label={STATUS_LABELS[status]}
-          size="small"
-          sx={{ bgcolor: STATUS_COLORS[status] + '18', color: STATUS_COLORS[status], fontWeight: 700, fontSize: 10, height: 22, flexShrink: 0 }}
-        />
-      )}
+
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexShrink: 0 }}>
+        {status && status !== 'none' && status !== 'future' && (
+          <Chip
+            label={STATUS_LABELS[status]}
+            size="small"
+            sx={{
+              bgcolor: `${STATUS_COLORS[status]}16`,
+              color: STATUS_COLORS[status],
+              fontWeight: 700,
+              fontSize: 10,
+              height: 22,
+            }}
+          />
+        )}
+        <ChevronRightIcon sx={{ color: 'var(--c-text-3)', fontSize: 18 }} />
+      </Box>
     </Box>
   )
 }

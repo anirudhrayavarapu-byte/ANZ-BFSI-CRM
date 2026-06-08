@@ -12,17 +12,20 @@ function TabPanel({ value, index, children }) {
   return value === index ? <Box>{children}</Box> : null
 }
 
-const AVATAR_COLORS = ['#1a237e', '#1565c0', '#1b5e20', '#4a148c', '#bf360c', '#006064', '#33691e', '#880e4f']
-function avatarColor(name) {
-  if (!name) return AVATAR_COLORS[0]
+const AVATAR_PALETTE = [
+  'oklch(36% 0.19 262)', 'oklch(32% 0.17 285)', 'oklch(38% 0.15 155)',
+  'oklch(34% 0.18 310)', 'oklch(37% 0.17  27)', 'oklch(33% 0.13 200)',
+]
+function avatarBg(name) {
+  if (!name) return AVATAR_PALETTE[0]
   let h = 0
-  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % AVATAR_COLORS.length
-  return AVATAR_COLORS[h]
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % AVATAR_PALETTE.length
+  return AVATAR_PALETTE[h]
 }
-function getInitials(name) {
+function initials(name) {
   if (!name) return '?'
-  const parts = name.trim().split(/\s+/)
-  return parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : name.slice(0, 2).toUpperCase()
+  const p = name.trim().split(/\s+/)
+  return p.length > 1 ? (p[0][0] + p[p.length - 1][0]).toUpperCase() : name.slice(0, 2).toUpperCase()
 }
 
 export default function ClientCardPage() {
@@ -33,30 +36,30 @@ export default function ClientCardPage() {
   const [latestFollowUp, setLatestFollowUp] = useState(null)
 
   useEffect(() => {
-    async function fetch() {
-      const { data } = await supabase
-        .from('clients')
-        .select('*, accounts ( name, strategic_importance, industry ), users!assigned_to ( username )')
-        .eq('id', id)
-        .single()
-      setClient(data)
-
-      const { data: meetings } = await supabase
-        .from('meetings')
-        .select('next_followup_date')
-        .eq('client_id', id)
-        .order('meeting_date', { ascending: false })
-        .limit(1)
-      setLatestFollowUp(meetings?.[0]?.next_followup_date ?? null)
+    async function load() {
+      const [{ data: c }, { data: m }] = await Promise.all([
+        supabase.from('clients')
+          .select('*, accounts(name, strategic_importance, industry), users!assigned_to(username)')
+          .eq('id', id).single(),
+        supabase.from('meetings')
+          .select('next_followup_date')
+          .eq('client_id', id)
+          .order('meeting_date', { ascending: false })
+          .limit(1),
+      ])
+      setClient(c)
+      setLatestFollowUp(m?.[0]?.next_followup_date ?? null)
       setLoading(false)
     }
-    fetch()
+    load()
   }, [id])
 
   if (loading) {
     return (
       <AppShell title="">
-        <Box sx={{ pt: 6, textAlign: 'center' }}><CircularProgress /></Box>
+        <Box sx={{ pt: 8, display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress sx={{ color: 'var(--c-text-3)' }} />
+        </Box>
       </AppShell>
     )
   }
@@ -65,48 +68,76 @@ export default function ClientCardPage() {
 
   return (
     <AppShell title="">
+      {/* Hero */}
       <Box sx={{
-        background: 'linear-gradient(135deg, #1a237e 0%, #1565c0 100%)',
-        px: 2, pt: 2, pb: 3,
+        bgcolor: 'var(--c-hero)',
+        px: 2.5, pt: 2, pb: 2.5,
         display: 'flex', alignItems: 'flex-start', gap: 2,
+        borderBottom: '1px solid var(--c-hero-border)',
       }}>
         <Avatar sx={{
-          width: 56, height: 56, flexShrink: 0,
-          bgcolor: avatarColor(client?.name),
-          border: '3px solid rgba(255,255,255,0.3)',
-          fontWeight: 700, fontSize: 20,
+          width: 52, height: 52,
+          bgcolor: avatarBg(client?.name),
+          borderRadius: '16px',
+          fontSize: 18, fontWeight: 800,
+          flexShrink: 0,
+          border: '1px solid oklch(100% 0 0 / 0.1)',
         }}>
-          {getInitials(client?.name)}
+          {initials(client?.name)}
         </Avatar>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography variant="h6" fontWeight={800} sx={{ color: '#fff', letterSpacing: '-0.3px', fontSize: 18, lineHeight: 1.2 }}>
+
+        <Box sx={{ flex: 1, minWidth: 0, pt: 0.25 }}>
+          <Typography sx={{
+            color: 'var(--c-hero-text)',
+            fontWeight: 800,
+            fontSize: 20,
+            letterSpacing: '-0.5px',
+            lineHeight: 1.15,
+          }}>
             {client?.name}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mt: 0.25 }}>
+          <Typography sx={{ color: 'var(--c-hero-muted)', fontSize: 13, mt: 0.3, lineHeight: 1.3 }}>
             {client?.title}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.75, flexWrap: 'wrap' }}>
-            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+            <Typography sx={{ color: 'oklch(55% 0.015 80)', fontSize: 12 }}>
               {client?.accounts?.name}
             </Typography>
             {latestFollowUp && status !== 'none' && (
               <Chip
                 label={STATUS_LABELS[status]}
                 size="small"
-                sx={{ height: 20, fontSize: 10, fontWeight: 700, bgcolor: STATUS_COLORS[status] + '30', color: '#fff', border: `1px solid ${STATUS_COLORS[status]}60` }}
+                sx={{
+                  height: 20, fontSize: 10, fontWeight: 700,
+                  bgcolor: `${STATUS_COLORS[status]}22`,
+                  color: STATUS_COLORS[status],
+                }}
               />
             )}
           </Box>
         </Box>
       </Box>
 
-      <Box sx={{ bgcolor: '#fff', position: 'sticky', top: 56, zIndex: 9, borderBottom: '1px solid', borderColor: 'divider' }}>
+      {/* Tabs */}
+      <Box sx={{
+        bgcolor: 'var(--c-card)',
+        position: 'sticky',
+        top: 56,
+        zIndex: 9,
+        borderBottom: '1px solid var(--c-divider)',
+      }}>
         <Tabs
           value={tab}
           onChange={(_, v) => setTab(v)}
           variant="fullWidth"
           sx={{
-            '& .MuiTabs-indicator': { height: 3, borderRadius: '3px 3px 0 0' },
+            '& .MuiTabs-indicator': {
+              height: 2,
+              borderRadius: '2px 2px 0 0',
+              bgcolor: 'var(--c-text)',
+            },
+            '& .MuiTab-root': { color: 'var(--c-text-2)', fontWeight: 600 },
+            '& .Mui-selected': { color: 'var(--c-text) !important', fontWeight: 700 },
           }}
         >
           <Tab label="Intel" />
