@@ -13,6 +13,7 @@ import TeamViewPage from './pages/TeamViewPage'
 import UserManagementPage from './pages/UserManagementPage'
 import AddClientPage from './pages/AddClientPage'
 import OnboardingPage from './pages/OnboardingPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 const shadow1 = '0 1px 2px oklch(12% 0.030 262 / 0.05), 0 2px 8px oklch(12% 0.030 262 / 0.06)'
 const shadow2 = '0 4px 16px oklch(12% 0.030 262 / 0.10), 0 1px 4px oklch(12% 0.030 262 / 0.06)'
@@ -110,6 +111,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
           <Route path="/clients" element={<ProtectedRoute><ClientListPage /></ProtectedRoute>} />
           <Route path="/clients/:id" element={<ProtectedRoute><ClientCardPage /></ProtectedRoute>} />
