@@ -20,12 +20,12 @@ const theme = createTheme({
   palette: {
     primary:    { main: '#1a237e', light: '#534bae', dark: '#000051' },
     secondary:  { main: '#0288d1' },
-    background: { default: 'oklch(96.5% 0.007 262)', paper: 'oklch(99.5% 0.003 262)' },
-    text:       { primary: 'oklch(17% 0.022 262)', secondary: 'oklch(50% 0.016 262)', disabled: 'oklch(68% 0.009 262)' },
-    success:    { main: 'oklch(51% 0.160 155)' },
-    error:      { main: 'oklch(52% 0.200 27)' },
-    warning:    { main: 'oklch(58% 0.180 55)' },
-    divider:    'oklch(94% 0.006 262)',
+    background: { default: '#f3f4f8', paper: '#ffffff' },
+    text:       { primary: '#191c2a', secondary: '#666d8a', disabled: '#9ba0b4' },
+    success:    { main: '#2e7d32' },
+    error:      { main: '#c62828' },
+    warning:    { main: '#e65100' },
+    divider:    '#eeeef4',
   },
   typography: {
     fontFamily: "'Figtree', system-ui, sans-serif",
