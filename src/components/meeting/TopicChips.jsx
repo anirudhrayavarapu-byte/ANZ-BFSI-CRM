@@ -1,4 +1,4 @@
-import { Box, Chip, Typography, TextField } from '@mui/material'
+import { Box, Typography, TextField } from '@mui/material'
 import { useState } from 'react'
 
 const PRESET_TOPICS = ['Strategy', 'Pricing', 'Product', 'Relationship', 'Risk', 'Operations', 'Custom']
@@ -8,44 +8,61 @@ export default function TopicChips({ value, onChange }) {
   const [customText, setCustomText] = useState('')
 
   function toggle(topic) {
-    if (topic === 'Custom') {
-      setShowCustom(s => !s)
-      return
-    }
-    const next = value.includes(topic) ? value.filter(t => t !== topic) : [...value, topic]
-    onChange(next)
+    if (topic === 'Custom') { setShowCustom(s => !s); return }
+    onChange(value.includes(topic) ? value.filter(t => t !== topic) : [...value, topic])
   }
 
   function addCustom() {
-    const trimmed = customText.trim()
-    if (trimmed && !value.includes(trimmed)) onChange([...value, trimmed])
+    const t = customText.trim()
+    if (t && !value.includes(t)) onChange([...value, t])
     setCustomText('')
   }
 
+  const customActive = showCustom || value.some(t => !PRESET_TOPICS.includes(t))
+
   return (
     <Box>
-      <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ textTransform: 'uppercase', letterSpacing: 0.6 }}>
-        Topics Discussed
+      <Typography sx={{
+        fontSize: 11, fontWeight: 700, letterSpacing: '1px',
+        textTransform: 'uppercase', color: 'var(--c-text-2)', mb: 1.5,
+      }}>
+        Topics discussed
       </Typography>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-        {PRESET_TOPICS.map(t => (
-          <Chip
-            key={t}
-            label={t}
-            onClick={() => toggle(t)}
-            variant={value.includes(t) || (t === 'Custom' && showCustom) ? 'filled' : 'outlined'}
-            color={value.includes(t) || (t === 'Custom' && showCustom) ? 'primary' : 'default'}
-            size="medium"
-            sx={{ fontWeight: 500 }}
-          />
-        ))}
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+        {PRESET_TOPICS.map(t => {
+          const active = value.includes(t) || (t === 'Custom' && customActive)
+          return (
+            <Box
+              key={t}
+              onClick={() => toggle(t)}
+              sx={{
+                px: 1.75, py: 0.75,
+                borderRadius: '10px',
+                cursor: 'pointer',
+                bgcolor: active ? 'var(--c-hero)' : 'var(--c-surface)',
+                border: '1px solid',
+                borderColor: active ? 'var(--c-hero)' : 'var(--c-border)',
+                transition: 'all 0.12s',
+                '&:active': { transform: 'scale(0.95)' },
+              }}
+            >
+              <Typography sx={{
+                fontSize: 13,
+                fontWeight: active ? 700 : 500,
+                color: active ? 'var(--c-hero-text)' : 'var(--c-text)',
+                letterSpacing: '-0.1px',
+              }}>
+                {t}
+              </Typography>
+            </Box>
+          )
+        })}
       </Box>
+
       {showCustom && (
         <TextField
-          size="small"
-          fullWidth
-          autoFocus
-          placeholder="Type custom topic and press Enter"
+          size="small" fullWidth autoFocus
+          placeholder="Type topic, press Enter"
           value={customText}
           onChange={e => setCustomText(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addCustom() } }}
@@ -53,8 +70,22 @@ export default function TopicChips({ value, onChange }) {
           sx={{ mt: 1.5 }}
         />
       )}
+
       {value.filter(t => !PRESET_TOPICS.includes(t)).map(t => (
-        <Chip key={t} label={t} onDelete={() => onChange(value.filter(x => x !== t))} size="small" sx={{ mt: 1, mr: 0.5 }} />
+        <Box
+          key={t}
+          onClick={() => onChange(value.filter(x => x !== t))}
+          sx={{
+            display: 'inline-flex', alignItems: 'center', gap: 0.5,
+            px: 1.5, py: 0.5, mt: 1, mr: 1,
+            borderRadius: '8px',
+            bgcolor: 'var(--c-hero)',
+            cursor: 'pointer',
+          }}
+        >
+          <Typography sx={{ fontSize: 12, fontWeight: 600, color: 'var(--c-hero-text)' }}>{t}</Typography>
+          <Typography sx={{ fontSize: 11, color: 'var(--c-hero-muted)' }}>×</Typography>
+        </Box>
       ))}
     </Box>
   )
