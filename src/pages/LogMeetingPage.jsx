@@ -54,26 +54,48 @@ export default function LogMeetingPage() {
   const { profile } = useAuthStore()
   const { logMeeting, submitting, error } = useMeetingStore()
 
-  const [clientName, setClientName]   = useState('')
-  const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0])
-  const [sentiment, setSentiment]     = useState('neutral')
-  const [followUp, setFollowUp]       = useState('1_month')
-  const [customDate, setCustomDate]   = useState('')
-  const [topics, setTopics]           = useState([])
-  const [summary, setSummary]         = useState('')
-  const [outcomes, setOutcomes]       = useState('')
-  const [showExtra, setShowExtra]     = useState(false)
+  const [clientName, setClientName]     = useState('')
+  const [selectedClientId, setSelectedClientId] = useState(clientId ?? null)
+  const [selectedAccountId, setSelectedAccountId] = useState(accountId ?? null)
+  const [myClients, setMyClients]       = useState([])
+  const [meetingDate, setMeetingDate]   = useState(new Date().toISOString().split('T')[0])
+  const [sentiment, setSentiment]       = useState('neutral')
+  const [followUp, setFollowUp]         = useState('1_month')
+  const [customDate, setCustomDate]     = useState('')
+  const [topics, setTopics]             = useState([])
+  const [summary, setSummary]           = useState('')
+  const [outcomes, setOutcomes]         = useState('')
+  const [showExtra, setShowExtra]       = useState(false)
 
   useEffect(() => {
-    if (!clientId) return
-    supabase.from('clients').select('name').eq('id', clientId).single()
-      .then(({ data }) => { if (data) setClientName(data.name) })
+    if (clientId) {
+      supabase.from('clients').select('name, account_id').eq('id', clientId).single()
+        .then(({ data }) => {
+          if (data) {
+            setClientName(data.name)
+            setSelectedAccountId(data.account_id)
+          }
+        })
+    } else {
+      // Load all clients for picker
+      supabase.from('clients')
+        .select('id, name, account_id, accounts(name)')
+        .eq('is_active', true)
+        .order('name')
+        .then(({ data }) => setMyClients(data ?? []))
+    }
   }, [clientId])
+
+  function handleClientPick(c) {
+    setSelectedClientId(c.id)
+    setSelectedAccountId(c.account_id)
+    setClientName(c.name)
+  }
 
   async function handleSubmit() {
     const { success } = await logMeeting({
-      client_id:          clientId,
-      account_id:         accountId || null,
+      client_id:          selectedClientId,
+      account_id:         selectedAccountId || null,
       logged_by:          profile?.id,
       meeting_date:       meetingDate,
       topics_discussed:   JSON.stringify(topics),
@@ -90,15 +112,54 @@ export default function LogMeetingPage() {
     <AppShell title="Log Meeting">
       <Box sx={{ bgcolor: 'var(--c-surface)', minHeight: '100%', pb: 12 }}>
 
-        {/* Client context bar */}
+        {/* Client context bar — shown when client is known */}
         {clientName && (
           <Box sx={{ px: 2.5, py: 1.5, bgcolor: 'var(--c-hero)', borderBottom: '1px solid var(--c-hero-border)' }}>
-            <Typography sx={{ fontSize: 12, color: 'var(--c-hero-muted)', fontWeight: 500 }}>
-              Meeting with
-            </Typography>
+            <Typography sx={{ fontSize: 12, color: 'var(--c-hero-muted)', fontWeight: 500 }}>Meeting with</Typography>
             <Typography sx={{ fontSize: 15, fontWeight: 700, color: 'var(--c-hero-text)', letterSpacing: '-0.2px' }}>
               {clientName}
             </Typography>
+          </Box>
+        )}
+
+        {/* Client picker — shown when navigated directly (no clientId in URL) */}
+        {!clientId && (
+          <Box sx={{ bgcolor: 'var(--c-card)', mb: 1.5 }}>
+            <Box sx={{ px: 2.5, py: 2 }}>
+              <Typography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--c-text-2)', mb: 1.5 }}>
+                Who did you meet?
+              </Typography>
+              {myClients.length === 0 ? (
+                <Typography sx={{ fontSize: 13, color: 'var(--c-text-3)' }}>No clients found. Add a client first.</Typography>
+              ) : (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  {myClients.map(c => {
+                    const active = selectedClientId === c.id
+                    return (
+                      <Box
+                        key={c.id}
+                        onClick={() => handleClientPick(c)}
+                        sx={{
+                          px: 2, py: 1.25, borderRadius: '12px', cursor: 'pointer',
+                          bgcolor: active ? 'var(--c-hero)' : 'var(--c-surface)',
+                          border: '1px solid', borderColor: active ? 'var(--c-hero)' : 'var(--c-border)',
+                          transition: 'all 0.12s', '&:active': { transform: 'scale(0.98)' },
+                        }}
+                      >
+                        <Typography sx={{ fontSize: 14, fontWeight: 700, color: active ? 'var(--c-hero-text)' : 'var(--c-text)', letterSpacing: '-0.2px' }}>
+                          {c.name}
+                        </Typography>
+                        {c.accounts?.name && (
+                          <Typography sx={{ fontSize: 12, color: active ? 'var(--c-hero-muted)' : 'var(--c-text-2)', mt: 0.15 }}>
+                            {c.accounts.name}
+                          </Typography>
+                        )}
+                      </Box>
+                    )
+                  })}
+                </Box>
+              )}
+            </Box>
           </Box>
         )}
 
@@ -273,7 +334,7 @@ export default function LogMeetingPage() {
           variant="contained"
           fullWidth
           size="large"
-          disabled={submitting || !meetingDate}
+          disabled={submitting || !meetingDate || !selectedClientId}
           onClick={handleSubmit}
           sx={{
             py: 1.7,
