@@ -58,7 +58,7 @@ export default function ClientListPage() {
         color="primary"
         aria-label="Add client"
         sx={{ position: 'fixed', bottom: 'calc(var(--safe-bottom) + 16px)', right: 16 }}
-        onClick={() => {}}
+        onClick={() => navigate('/clients/new')}
       >
         <AddIcon />
       </Fab>
