@@ -87,9 +87,7 @@ export default function LogMeetingPage() {
   }, [clientId])
 
   function handleClientPick(c) {
-    setSelectedClientId(c.id)
-    setSelectedAccountId(c.account_id)
-    setClientName(c.name)
+    navigate(`/log-meeting?clientId=${c.id}&accountId=${c.account_id ?? ''}`, { replace: true })
   }
 
   async function handleSubmit() {
