@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Box, Typography, TextField, Button, CircularProgress, Alert, Collapse } from '@mui/material'
+import { Box, Typography, TextField, Button, CircularProgress, Alert, Collapse, Tabs, Tab } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import AppShell from '../components/AppShell'
 import SentimentPicker from '../components/meeting/SentimentPicker'
 import TopicChips from '../components/meeting/TopicChips'
+import OpportunityTab from '../components/clientcard/OpportunityTab'
 import { useMeetingStore } from '../store/meetingStore'
 import { useAuthStore } from '../store/authStore'
 import { supabase } from '../lib/supabase'
@@ -66,6 +67,7 @@ export default function LogMeetingPage() {
   const [summary, setSummary]           = useState('')
   const [outcomes, setOutcomes]         = useState('')
   const [showExtra, setShowExtra]       = useState(false)
+  const [tab, setTab]                   = useState(0)
 
   useEffect(() => {
     if (clientId) {
@@ -119,6 +121,33 @@ export default function LogMeetingPage() {
             </Typography>
           </Box>
         )}
+
+        {/* Tabs — only when client is known */}
+        {clientId && (
+          <Box sx={{ bgcolor: 'var(--c-card)', borderBottom: '1px solid var(--c-divider)', position: 'sticky', top: 56, zIndex: 9 }}>
+            <Tabs
+              value={tab}
+              onChange={(_, v) => setTab(v)}
+              variant="fullWidth"
+              sx={{
+                '& .MuiTabs-indicator': { height: 2, borderRadius: '2px 2px 0 0', bgcolor: 'var(--c-text)' },
+                '& .MuiTab-root': { color: 'var(--c-text-2)', fontWeight: 600, minHeight: 46 },
+                '& .Mui-selected': { color: 'var(--c-text) !important', fontWeight: 700 },
+              }}
+            >
+              <Tab label="Meeting" />
+              <Tab label="Pipeline" />
+            </Tabs>
+          </Box>
+        )}
+
+        {/* Pipeline tab content */}
+        {clientId && tab === 1 && (
+          <OpportunityTab clientId={selectedClientId} accountId={selectedAccountId} />
+        )}
+
+        {/* Meeting tab — hidden when pipeline tab is active */}
+        {tab === 0 && <>
 
         {/* Client picker — shown when navigated directly (no clientId in URL) */}
         {!clientId && (
@@ -316,10 +345,11 @@ export default function LogMeetingPage() {
             </Box>
           </Collapse>
         </Box>
+        </> /* end Meeting tab */}
       </Box>
 
-      {/* Fixed bottom button */}
-      <Box sx={{
+      {/* Fixed bottom button — only on Meeting tab */}
+      {tab === 0 && <Box sx={{
         position: 'fixed',
         bottom: 0, left: 0, right: 0,
         px: 2.5,
@@ -349,7 +379,7 @@ export default function LogMeetingPage() {
         >
           {submitting ? <CircularProgress size={20} sx={{ color: 'var(--c-hero-muted)' }} /> : 'Log Meeting'}
         </Button>
-      </Box>
+      </Box>}
     </AppShell>
   )
 }
