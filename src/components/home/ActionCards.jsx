@@ -4,12 +4,14 @@ import EditNoteIcon from '@mui/icons-material/EditNote'
 import GroupsIcon from '@mui/icons-material/Groups'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import BusinessIcon from '@mui/icons-material/Business'
+import HandshakeIcon from '@mui/icons-material/Handshake'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 
 const CARDS = [
   { key: 'clients',  icon: PeopleAltIcon,      label: 'My Clients',    sub: 'View & manage',     path: '/clients',      roles: ['team_member','manager','super_manager'] },
   { key: 'accounts', icon: BusinessIcon,        label: 'Accounts',      sub: 'Client mapping',    path: '/accounts',     roles: ['team_member','manager','super_manager'] },
+  { key: 'partners', icon: HandshakeIcon,        label: 'Partners',      sub: 'Partner contacts',   path: '/partners',     roles: ['team_member','manager','super_manager'] },
   { key: 'log',      icon: EditNoteIcon,        label: 'Log Meeting',   sub: 'Quick entry',        path: '/log-meeting',  roles: ['team_member','manager','super_manager'] },
   { key: 'team',     icon: GroupsIcon,          label: 'Team View',     sub: 'Coverage & cadence', path: '/team',         roles: ['manager','super_manager'] },
   { key: 'users',    icon: ManageAccountsIcon,  label: 'Manage Users',  sub: 'Roles & access',     path: '/admin/users',  roles: ['manager','super_manager'] },

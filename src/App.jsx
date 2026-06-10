@@ -16,6 +16,10 @@ import OnboardingPage from './pages/OnboardingPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import AccountListPage from './pages/AccountListPage'
 import AccountDetailPage from './pages/AccountDetailPage'
+import PartnerListPage from './pages/PartnerListPage'
+import PartnerDetailPage from './pages/PartnerDetailPage'
+import PartnerContactPage from './pages/PartnerContactPage'
+import AddPartnerContactPage from './pages/AddPartnerContactPage'
 
 const shadow1 = '0 1px 2px oklch(12% 0.030 262 / 0.05), 0 2px 8px oklch(12% 0.030 262 / 0.06)'
 const shadow2 = '0 4px 16px oklch(12% 0.030 262 / 0.10), 0 1px 4px oklch(12% 0.030 262 / 0.06)'
@@ -124,6 +128,10 @@ export default function App() {
           <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
           <Route path="/accounts" element={<ProtectedRoute><AccountListPage /></ProtectedRoute>} />
           <Route path="/accounts/:id" element={<ProtectedRoute><AccountDetailPage /></ProtectedRoute>} />
+          <Route path="/partners" element={<ProtectedRoute><PartnerListPage /></ProtectedRoute>} />
+          <Route path="/partners/:id" element={<ProtectedRoute><PartnerDetailPage /></ProtectedRoute>} />
+          <Route path="/partners/:orgId/contacts/:contactId" element={<ProtectedRoute><PartnerContactPage /></ProtectedRoute>} />
+          <Route path="/partners/:orgId/add-contact" element={<ProtectedRoute><AddPartnerContactPage /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
