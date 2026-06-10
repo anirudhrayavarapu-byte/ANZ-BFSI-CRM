@@ -5,9 +5,14 @@ import AppShell from '../components/AppShell'
 import { supabase } from '../lib/supabase'
 import { formatDate } from '../utils/dateFormat'
 
-const formatAUD = v =>
-  v == null ? '—'
-  : new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 }).format(v)
+const formatAUD = v => {
+  if (v == null) return '—'
+  const n = new Intl.NumberFormat('en-AU', {
+    style: 'currency', currency: 'AUD',
+    maximumFractionDigits: v % 1 === 0 ? 0 : 1,
+  }).format(v)
+  return `${n}M`
+}
 
 const STATUS_CONFIG = {
   active: { label: 'Active',  color: '#1565c0', bg: '#1565c018' },
