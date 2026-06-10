@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Box, Typography, Chip, CircularProgress, Avatar, Fab } from '@mui/material'
+import { Box, Typography, Chip, CircularProgress, Avatar, Fab, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material'
 import EditNoteIcon from '@mui/icons-material/EditNote'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import AppShell from '../components/AppShell'
 import { supabase } from '../lib/supabase'
 import { getFollowUpStatus, STATUS_COLORS, STATUS_LABELS } from '../utils/followUpStatus'
@@ -275,20 +276,29 @@ export default function AccountDetailPage() {
         </Box>
       </Box>
 
-      {/* FAB: Log Meeting */}
-      <Fab
-        onClick={() => navigate('/log-meeting')}
+      <SpeedDial
+        ariaLabel="Account actions"
         sx={{
           position: 'fixed', bottom: 'calc(var(--safe-bottom) + 24px)', right: 24,
-          bgcolor: 'var(--c-hero)', color: 'var(--c-hero-text)',
-          '&:hover': { bgcolor: 'var(--c-hero-raised)' },
-          gap: 1, px: 2.5, borderRadius: '16px', width: 'auto', height: 52,
+          '& .MuiSpeedDial-fab': { bgcolor: 'var(--c-hero)', color: 'var(--c-hero-text)', '&:hover': { bgcolor: 'var(--c-hero-raised)' } },
         }}
-        variant="extended"
+        icon={<SpeedDialIcon />}
       >
-        <EditNoteIcon sx={{ fontSize: 20 }} />
-        Log Meeting
-      </Fab>
+        <SpeedDialAction
+          icon={<PersonAddIcon />}
+          tooltipTitle="Add Client"
+          tooltipOpen
+          onClick={() => navigate(`/clients/new?accountId=${id}`)}
+          sx={{ '& .MuiSpeedDialAction-fab': { bgcolor: 'var(--c-hero)', color: 'var(--c-hero-text)' } }}
+        />
+        <SpeedDialAction
+          icon={<EditNoteIcon />}
+          tooltipTitle="Log Meeting"
+          tooltipOpen
+          onClick={() => navigate('/log-meeting')}
+          sx={{ '& .MuiSpeedDialAction-fab': { bgcolor: 'var(--c-hero)', color: 'var(--c-hero-text)' } }}
+        />
+      </SpeedDial>
     </AppShell>
   )
 }

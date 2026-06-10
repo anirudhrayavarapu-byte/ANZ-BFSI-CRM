@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Typography, TextField, Button, CircularProgress, Alert } from '@mui/material'
 import AppShell from '../components/AppShell'
 import { useAccounts } from '../hooks/useAccounts'
@@ -46,6 +46,8 @@ function InlineInput({ placeholder, value, onChange, type = 'text' }) {
 
 export default function AddClientPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const presetAccountId = searchParams.get('accountId')
   const { profile } = useAuthStore()
   const { accounts } = useAccounts()
 
@@ -53,6 +55,13 @@ export default function AddClientPage() {
   const [newAccountName, setNewAccountName] = useState('')
   const [newAccountIndustry, setNewAccountIndustry] = useState('')
   const [isNewAccount, setIsNewAccount] = useState(false)
+
+  useEffect(() => {
+    if (presetAccountId && accounts.length > 0) {
+      const match = accounts.find(a => a.id === presetAccountId)
+      if (match) setSelectedAccount(match)
+    }
+  }, [presetAccountId, accounts])
 
   const [name, setName]   = useState('')
   const [title, setTitle] = useState('')
