@@ -5,6 +5,7 @@ import GroupsIcon from '@mui/icons-material/Groups'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import BusinessIcon from '@mui/icons-material/Business'
 import HandshakeIcon from '@mui/icons-material/Handshake'
+import BarChartIcon from '@mui/icons-material/BarChart'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 
@@ -15,6 +16,7 @@ const CARDS = [
   { key: 'log',      icon: EditNoteIcon,        label: 'Log Meeting',   sub: 'Quick entry',        path: '/log-meeting',  roles: ['team_member','manager','super_manager'] },
   { key: 'team',     icon: GroupsIcon,          label: 'Team View',     sub: 'Coverage & cadence', path: '/team',         roles: ['manager','super_manager'] },
   { key: 'users',    icon: ManageAccountsIcon,  label: 'Manage Users',  sub: 'Roles & access',     path: '/admin/users',  roles: ['manager','super_manager'] },
+  { key: 'reports',  icon: BarChartIcon,        label: 'Reports',       sub: 'Team activity',      path: '/reports',      roles: ['manager','super_manager'] },
 ]
 
 export default function ActionCards() {
