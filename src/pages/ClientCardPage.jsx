@@ -5,6 +5,7 @@ import AppShell from '../components/AppShell'
 import IntelTab from '../components/clientcard/IntelTab'
 import MeetingsTab from '../components/clientcard/MeetingsTab'
 import ProfileTab from '../components/clientcard/ProfileTab'
+import OpportunityTab from '../components/clientcard/OpportunityTab'
 import { supabase } from '../lib/supabase'
 import { getFollowUpStatus, STATUS_LABELS, STATUS_COLORS } from '../utils/followUpStatus'
 
@@ -142,13 +143,15 @@ export default function ClientCardPage() {
         >
           <Tab label="Intel" />
           <Tab label="Meetings" />
+          <Tab label="Pipeline" />
           <Tab label="Profile" />
         </Tabs>
       </Box>
 
       <TabPanel value={tab} index={0}><IntelTab clientId={id} /></TabPanel>
       <TabPanel value={tab} index={1}><MeetingsTab clientId={id} accountId={client?.account_id} /></TabPanel>
-      <TabPanel value={tab} index={2}><ProfileTab client={client} /></TabPanel>
+      <TabPanel value={tab} index={2}><OpportunityTab clientId={id} accountId={client?.account_id} /></TabPanel>
+      <TabPanel value={tab} index={3}><ProfileTab client={client} /></TabPanel>
     </AppShell>
   )
 }
