@@ -22,6 +22,7 @@ import PartnerContactPage from './pages/PartnerContactPage'
 import AddPartnerContactPage from './pages/AddPartnerContactPage'
 import ReportsPage from './pages/ReportsPage'
 import PipelinePage from './pages/PipelinePage'
+import AddAccountPage from './pages/AddAccountPage'
 
 const shadow1 = '0 1px 2px oklch(12% 0.030 262 / 0.05), 0 2px 8px oklch(12% 0.030 262 / 0.06)'
 const shadow2 = '0 4px 16px oklch(12% 0.030 262 / 0.10), 0 1px 4px oklch(12% 0.030 262 / 0.06)'
@@ -129,6 +130,7 @@ export default function App() {
           <Route path="/clients/new" element={<ProtectedRoute><AddClientPage /></ProtectedRoute>} />
           <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
           <Route path="/accounts" element={<ProtectedRoute><AccountListPage /></ProtectedRoute>} />
+          <Route path="/accounts/new" element={<ProtectedRoute><AddAccountPage /></ProtectedRoute>} />
           <Route path="/accounts/:id" element={<ProtectedRoute><AccountDetailPage /></ProtectedRoute>} />
           <Route path="/partners" element={<ProtectedRoute><PartnerListPage /></ProtectedRoute>} />
           <Route path="/partners/:id" element={<ProtectedRoute><PartnerDetailPage /></ProtectedRoute>} />

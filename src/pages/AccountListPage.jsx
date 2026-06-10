@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Box, Typography, CircularProgress, Avatar } from '@mui/material'
+import { Box, Typography, CircularProgress, Avatar, Fab } from '@mui/material'
 import BusinessIcon from '@mui/icons-material/Business'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import PeopleIcon from '@mui/icons-material/People'
+import AddIcon from '@mui/icons-material/Add'
 import { useNavigate } from 'react-router-dom'
 import AppShell from '../components/AppShell'
 import { supabase } from '../lib/supabase'
@@ -134,6 +135,15 @@ export default function AccountListPage() {
           </>
         )}
       </Box>
+
+      <Fab
+        color="primary"
+        aria-label="Add account"
+        sx={{ position: 'fixed', bottom: 'calc(var(--safe-bottom) + 16px)', right: 16, bgcolor: 'var(--c-hero)', '&:hover': { bgcolor: 'var(--c-hero-raised)' } }}
+        onClick={() => navigate('/accounts/new')}
+      >
+        <AddIcon />
+      </Fab>
     </AppShell>
   )
 }
