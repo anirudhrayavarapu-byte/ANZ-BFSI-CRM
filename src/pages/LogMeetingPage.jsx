@@ -71,6 +71,7 @@ export default function LogMeetingPage() {
 
   useEffect(() => {
     if (clientId) {
+      setSelectedClientId(clientId)
       supabase.from('clients').select('name, account_id').eq('id', clientId).single()
         .then(({ data }) => {
           if (data) {
