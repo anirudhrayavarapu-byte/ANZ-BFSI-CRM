@@ -56,6 +56,18 @@ export default function AddAccountPage() {
     if (!name.trim()) { setError('Account name is required'); return }
     setSaving(true)
     setError('')
+
+    const { data: existing } = await supabase
+      .from('accounts')
+      .select('id')
+      .ilike('name', name.trim())
+      .maybeSingle()
+    if (existing) {
+      setError(`An account named "${name.trim()}" already exists. Search for it in the Accounts list.`)
+      setSaving(false)
+      return
+    }
+
     const { data, error: err } = await supabase.from('accounts').insert({
       name:     name.trim(),
       industry: industry.trim() || null,

@@ -190,14 +190,14 @@ export default function LogMeetingPage() {
           </Box>
         )}
 
-        {error && (
+        {error && clientId && (
           <Box sx={{ px: 2.5, pt: 2 }}>
             <Alert severity="error" sx={{ borderRadius: 2 }}>{error}</Alert>
           </Box>
         )}
 
-        {/* White form card */}
-        <Box sx={{ bgcolor: 'var(--c-card)', mx: 0 }}>
+        {/* White form card — only shown once a client is selected */}
+        {clientId && <Box sx={{ bgcolor: 'var(--c-card)', mx: 0 }}>
 
           {/* Date */}
           <Box sx={{ px: 2.5, py: 2, borderBottom: '1px solid var(--c-divider)' }}>
@@ -344,12 +344,12 @@ export default function LogMeetingPage() {
               />
             </Box>
           </Collapse>
-        </Box>
+        </Box>}
         </> /* end Meeting tab */}
       </Box>
 
-      {/* Fixed bottom button — only on Meeting tab */}
-      {tab === 0 && <Box sx={{
+      {/* Fixed bottom button — only on Meeting tab when a client is selected */}
+      {tab === 0 && clientId && <Box sx={{
         position: 'fixed',
         bottom: 0, left: 0, right: 0,
         px: 2.5,
